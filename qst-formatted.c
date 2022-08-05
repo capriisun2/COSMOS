@@ -29,14 +29,21 @@ double prob[N];
 for (i = 0; i < N; i++){
    for (j =0; j<N; j++){
       mat[i][j]=0.0;
+      newMat[N][N] = 0.0;
+      mat_r[N][N] = 0.0;
+      mat_i[N][N] =0.0;
    }
 }
 
 for (i =0; i<N; i++){
       psi_r[i] = 0.0;
       psi_i[i] = 0.0;
+      psi[N] = 0.0;
+      prob[N] = 0.0;
 }
 psi_r[0] = 1.0;
+psi[0] = 1.0;
+prob[0] = 1.0;
 
 // mat[0][0] = 11;
 // mat[0][1] = 8;
@@ -76,14 +83,21 @@ printf("\n ");
 double val_r[N],val_i[N],vecs[N][N];
 get_eigenvalues(N, mat, val_r, val_i, vecs,1);
 
-for(k = 0; k < N; k++) {
-   for(i = 0; i < N; i++)
+fprintf(fileout4,"%/lf", psi[0]);
+for(t = 0; t < 4; t = t + 0.01) 
+{
+   for (int i = 0; i < N; i++){
+   for (int j =0; j<N; j++){
+      mat_r[N][N] = 0.0;
+      mat_i[N][N] =0.0;
+   } }
+   for(k = 0; k < N; k++) 
    {
-      for(j = 0; j < N; j++)
+      for(int i = 0; i < N; i++)
       {
-          newMat[i][j] += ((vecs[k][i] * vecs[k][j]) * val_r[k]);
-          for(t = 0; t < 4; t = t + 0.01)
+         for(int j = 0; j < N; j++)
           {
+          newMat[i][j] += ((vecs[k][i] * vecs[k][j]) * val_r[k]);
             // double norm;
             // double denomSum;
             // denomSum=0;
@@ -110,6 +124,7 @@ for(k = 0; k < N; k++) {
 
 
 
+
 printf("\nEigenvalues: \n");
 for (i = 0; i < N;i++){
 fprintf(fileout1,"%12.6lf",val_r[i]);
@@ -117,7 +132,7 @@ fprintf(fileout1,"%12.6lf",val_r[i]);
 
 printf("\nEigenVectors: \n");
 for (j = 0; j < N;j++){
-   for (i = 0; i < N;i++){
+   for (i = 0; i < N; i++){
       
       fprintf(fileout3, "%8.4lf",vecs[i][j]);
      
