@@ -24,6 +24,8 @@ double mat_i[N][N];
 double psi[N];
 double psi_r[N];
 double psi_i[N];
+double newpsi_r[N];
+double newpsi_i[N];
 double prob[N];
 
 for (i = 0; i < N; i++){
@@ -83,13 +85,13 @@ printf("\n ");
 double val_r[N],val_i[N],vecs[N][N];
 get_eigenvalues(N, mat, val_r, val_i, vecs,1);
 
-fprintf(fileout4,"%/lf", psi[0]);
 for(t = 0; t < 4; t = t + 0.01) 
 {
+   fprintf(fileout5,"timestep %lf \n", t);
    for (int i = 0; i < N; i++){
-   for (int j =0; j<N; j++){
-      mat_r[N][N] = 0.0;
-      mat_i[N][N] =0.0;
+   for (int j = 0; j<N; j++){
+      mat_r[i][j] = 0.0;
+      mat_i[i][j] =0.0;
    } }
    for(k = 0; k < N; k++) 
    {
@@ -108,15 +110,24 @@ for(t = 0; t < 4; t = t + 0.01)
             // norm = 1/denomSum;
             mat_r[i][j] += ((vecs[k][i] * vecs[k][j]) * cos(val_r[k] * t));
             mat_i[i][j] -= ((vecs[k][i] * vecs[k][j]) * sin(val_r[k] * t));
-            psi_r[i] += ((mat_r[i][j]*psi_r[i]) - (mat_i[i][j]*psi_i[i]));
-            psi_i[i] += ((mat_r[i][j]*psi_i[i]) + (mat_i[i][j]*psi_r[i]));
-            psi[i] = psi_r[i] + psi_i[i];
-            fprintf(fileout4,"%12.8lf", psi[i]);
-            prob[i] = (psi_r[i]  * psi_r[i]) + (psi_i[i] * psi_i[i]);
-            fprintf(fileout5,"%12.8lf", prob[i]);
           }
       }
    }
+   double norm = 0;
+   for(int i = 0; i < N; i++)
+      {
+         newpsi_r[i] = 0.0;
+         newpsi_i[i] = 0.0;
+         for(int j = 0; j < N; j++)
+          {
+         newpsi_r[i] += ((mat_r[i][j]*psi_r[j]) - (mat_i[i][j]*psi_i[j]));
+         newpsi_i[i] += ((mat_r[i][j]*psi_i[j]) + (mat_i[i][j]*psi_r[j]));
+          }
+          psi_r[i] = newpsi_r[i];
+          psi_i[i] = newpsi_i[i];
+         prob[i] = (psi_r[i]  * psi_r[i]) + (psi_i[i] * psi_i[i]);
+          fprintf(fileout5,"%6i %12.8lf \n", i, prob[i]);
+      }
 }
 
 
