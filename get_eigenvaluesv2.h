@@ -56,12 +56,12 @@ void get_eigenvalues(int N, double mat[N][N], double vals_real_return[N],double 
         dgeev_( "N","V", &N, mat_copy, &N, vals_real_return, vals_im_return, NULL, &N, vecs_return_copy, &N, work, &LWORK, &info );
         
         free(work);
-        for (int i =0; i<N; i++){
-        	for(int j =0; j<N; j++){
+        for (int i = 0; i<N; i++){
+        	for(int j = 0; j<N; j++){
          		vecs_return[i][j] = vecs_return_copy[N*(i)+j];
          	}
          }
-        if (sortflag== 1){
+        if (sortflag == 1){
         	double **eigsortarr;
         	eigsortarr = malloc(N * sizeof(double*));
     		for (int i = 0; i < N; i++){

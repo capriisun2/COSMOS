@@ -25,6 +25,16 @@ int main() {
   double psi_r[N];
   double psi_i[N];
   double prob[N];
+  double mat[N][N];
+  double newMat[N][N];
+  double mat_r[N][N];
+  double mat_i[N][N];
+  double psi[N];
+  double psi_r[N];
+  double psi_i[N];
+  double newpsi_r[N];
+  double newpsi_i[N];
+  double prob[N];
 
   for (i = 0; i < N; i++) {
     for (j = 0; j < N; j++) {
@@ -108,6 +118,65 @@ int main() {
     fprintf(eigvalslog, "%12.6lf", val_r[i]);
   }
 
+  for (j = 0; j < N; j++) {
+    for (i = 0; i < N; i++) {
+      fprintf(eigvectslog, "%8.4lf", vecs[i][j]);
+    }
+
+    fprintf(eigvectslog, "\n");
+  }
+  fclose(eigvalslog);
+  fclose(matrixlog);
+  fclose(eigvectslog);
+  fclose(psilog);
+  fclose(problog);
+  return 0;
+  for (t = 0; t < 4; t = t + 0.01) {
+    fprintf(problog, "timestep %lf \n", t);
+    for (int i = 0; i < N; i++) {
+      for (int j = 0; j < N; j++) {
+        mat_r[i][j] = 0.0;
+        mat_i[i][j] = 0.0;
+      }
+    }
+    for (k = 0; k < N; k++) {
+      for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+          newMat[i][j] += ((vecs[k][i] * vecs[k][j]) * val_r[k]);
+          // double norm;
+          // double denomSum;
+          // denomSum=0;
+          // for(int h = 0; h < N; h++)
+          //    {
+          //    denomSum += pow(vecs[k][h],2);
+          //    }
+          // norm = 1/denomSum;
+          mat_r[i][j] += ((vecs[k][i] * vecs[k][j]) * cos(val_r[k] * t));
+          mat_i[i][j] -= ((vecs[k][i] * vecs[k][j]) * sin(val_r[k] * t));
+        }
+      }
+    }
+    double norm = 0;
+    for (int i = 0; i < N; i++) {
+      newpsi_r[i] = 0.0;
+      newpsi_i[i] = 0.0;
+      for (int j = 0; j < N; j++) {
+        newpsi_r[i] += ((mat_r[i][j] * psi_r[j]) - (mat_i[i][j] * psi_i[j]));
+        newpsi_i[i] += ((mat_r[i][j] * psi_i[j]) + (mat_i[i][j] * psi_r[j]));
+      }
+      psi_r[i] = newpsi_r[i];
+      psi_i[i] = newpsi_i[i];
+      prob[i] = (psi_r[i] * psi_r[i]) + (psi_i[i] * psi_i[i]);
+      fprintf(problog, "%6i %12.8lf \n", i, prob[i]);
+    }
+  }
+
+  printf("\nEigenvalues: \n");
+  for (i = 0; i < N; i++) {
+    fprintf(eigvalslog, "%12.6lf", val_r[i]);
+  }
+
+  printf("\nEigenVectors: \n");
   for (j = 0; j < N; j++) {
     for (i = 0; i < N; i++) {
       fprintf(eigvectslog, "%8.4lf", vecs[i][j]);
