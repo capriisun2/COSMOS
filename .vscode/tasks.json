@@ -10,10 +10,9 @@
           "${file}",
           "-o",
           "${fileDirname}/bin/${fileBasenameNoExtension}",
-          // "-fsanitize=address",
+          "-fsanitize=address",
           "-fsanitize=undefined",
           "-lm",
-          "-lsodium",
           "-lopenblas"
         ],
         "options": {

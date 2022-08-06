@@ -25,16 +25,8 @@ int main() {
   double psi_r[N];
   double psi_i[N];
   double prob[N];
-  double mat[N][N];
-  double newMat[N][N];
-  double mat_r[N][N];
-  double mat_i[N][N];
-  double psi[N];
-  double psi_r[N];
-  double psi_i[N];
   double newpsi_r[N];
   double newpsi_i[N];
-  double prob[N];
 
   for (i = 0; i < N; i++) {
     for (j = 0; j < N; j++) {
@@ -171,7 +163,7 @@ int main() {
     }
   }
 
-  printf("\nEigenvalues: \n");
+//   printf("\nEigenvalues: \n");
   for (i = 0; i < N; i++) {
     fprintf(eigvalslog, "%12.6lf", val_r[i]);
   }
@@ -189,5 +181,7 @@ int main() {
   fclose(eigvectslog);
   fclose(psilog);
   fclose(problog);
+
+  
   return 0;
 }
